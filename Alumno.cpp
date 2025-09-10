@@ -1,5 +1,6 @@
 #include "Alumno.h"
 
+Alumno::Alumno(){};
 Alumno::Alumno(int id, string nombre, string apellido, string carrera, string fechaIngreso) {
     this->id = id;
     this->nombre = nombre;

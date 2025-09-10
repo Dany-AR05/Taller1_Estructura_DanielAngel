@@ -12,6 +12,7 @@ private:
     string fechaIngreso;
 
 public:
+    Alumno();
     Alumno(int id, string nombre, string apellido, string carrera, string fechaIngreso);
     int getId();
     string getNombre();
