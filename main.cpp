@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Alumno.h"
+#include "Curso.h"
 using namespace std;
 
 class  NodoAlumno {
@@ -19,14 +20,35 @@ public:
     void setSiguiente(NodoAlumno* siguiente){ this->siguiente = siguiente; }
 };
 
+class NodoCurso {
+private:
+    Curso curso;
+    NodoCurso* siguiente;
+
+public:
+    NodoCurso(Curso curso) {
+        this->curso = curso;
+        this->siguiente = nullptr;
+    }
+
+    Curso getCurso(){ return this->curso; }
+    void setCurso(Curso curso){ this->curso = curso; }
+    NodoCurso* getSiguiente(){ return this->siguiente; }
+    void setSiguiente(NodoCurso* siguiente){ this->siguiente = siguiente; }
+};
+
 bool addAlumno(NodoAlumno*& head);
 void buscarAlumno(NodoAlumno* head);
 bool esString(string buscador);
 bool eliminarAlumno(NodoAlumno*& head);
+bool addCurso(NodoCurso*& head);
+void buscarCurso(NodoCurso* head);
+bool eliminarCurso(NodoCurso*& head);
 
 
 int main() {
-    NodoAlumno* head = nullptr;
+    NodoAlumno* headAlumno = nullptr;
+    NodoCurso* headCurso = nullptr;
 
     int opcion = 10;
     int opcion2 = 10;
@@ -51,7 +73,7 @@ int main() {
 
                 switch (opcion2) {
                     case 1: {
-                        if (addAlumno(head)) {
+                        if (addAlumno(headAlumno)) {
                             cout << "Alumno Guardado Correctamente" << endl;
                         } else {
                             cout << "Alumno No Guardado" << endl;
@@ -59,23 +81,20 @@ int main() {
                         break;
                     }
                     case 2: {
-                        buscarAlumno(head);
+                        buscarAlumno(headAlumno);
                         break;
-
                     }
                     case 3: {
-                        if (eliminarAlumno(head)) {
+                        if (eliminarAlumno(headAlumno)) {
                             cout << "Alumno Eliminado Correctamente" << endl;
                         } else {
                             cout << "Alumno no eliminado" << endl;
                         }
                         break;
-
                     }
                 }
                 break;
             }
-
             case 2: {
                 cout << "---Bienvenido al manejo de cursos---" << endl;
                 cout << "1.- Crear curso" << endl;
@@ -86,14 +105,24 @@ int main() {
 
                 switch (opcion2) {
                     case 1: {
+                        if (addCurso(headCurso)) {
+                            cout << "Curso Guardado Correctamente" << endl;
+                        } else {
+                            cout << "Curso No Guardado" << endl;
+                        }
                         break;
-
                     }
                     case 2: {
+                        buscarCurso(headCurso);
                         break;
 
                     }
                     case 3: {
+                        if (eliminarCurso(headCurso)) {
+                            cout << "Curso Eliminado Correctamente" << endl;
+                        } else {
+                            cout << "Curso no eliminado" << endl;
+                        }
                         break;
 
                     }
@@ -190,6 +219,7 @@ bool addAlumno(NodoAlumno*& head) {
     cin >> carrera;
     cout << "Ingrese fecha de ingreso: ";
     cin >> fechaIngreso;
+
     Alumno alumno(id, nombre, apellido, carrera, fechaIngreso);
     NodoAlumno* nuevoAlumno = new NodoAlumno(alumno);
     if (head==nullptr) {
@@ -211,10 +241,10 @@ void buscarAlumno(NodoAlumno* head) {
     cout << "Ingrese un id o nombre: ";
     cin >> buscador;
     NodoAlumno* aux = head;
+    cout << "Alumnos encontrados: " << endl;
     while (aux != nullptr) {
         if (esString(buscador)) {
             if (aux->getAlumno().getNombre()==buscador) {
-                cout << "Alumnos encontrados: " << endl;
                 cout << aux->getAlumno().getId();
                 cout << "---";
                 cout << aux->getAlumno().getNombre();
@@ -228,7 +258,6 @@ void buscarAlumno(NodoAlumno* head) {
         } else {
             int buscadorId = stoi(buscador);
             if (aux->getAlumno().getId()==buscadorId) {
-                cout << "Alumno encontrado: " << endl;
                 cout << aux->getAlumno().getId();
                 cout << "---";
                 cout << aux->getAlumno().getNombre();
@@ -285,3 +314,119 @@ bool eliminarAlumno(NodoAlumno*& head) {
     }
     return false;
 }
+
+bool addCurso(NodoCurso*& head) {
+    string codigoString;
+    string nombre;
+    string cantidadMaxString;
+    string carrera;
+    string profesor;
+    cout << "Ingrese codigo : ";
+    cin >> codigoString;
+    if (esString(codigoString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return false;
+    }
+    int codigo = stoi(codigoString);
+    cout << "Ingrese nombre: ";
+    cin >> nombre;
+    cout << "Ingrese cantidad maxima de estudiantes: ";
+    cin >> cantidadMaxString;
+    if (esString(cantidadMaxString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return false;
+    }
+    int cantidadMax = stoi(cantidadMaxString);
+    cout << "Ingrese carrera: ";
+    cin >> carrera;
+    cout << "Ingrese nombre del profesor: ";
+    cin >> profesor;
+    Curso curso(codigo, nombre, cantidadMax, carrera, profesor);
+
+    NodoCurso* nuevoCurso = new NodoCurso(curso);
+
+    if (head==nullptr) {
+        head=nuevoCurso;
+        return true;
+    }
+
+    NodoCurso* aux = head;
+    while (aux->getSiguiente() != nullptr) {
+        aux = aux->getSiguiente();
+    }
+    aux->setSiguiente(nuevoCurso);
+    return true;
+}
+
+void buscarCurso(NodoCurso* head) {
+    string buscador;
+    cout << "Ingrese un codigo o nombre: ";
+    cin >> buscador;
+    NodoCurso* aux = head;
+    cout << "Cursos encontrados: " << endl;
+    while (aux != nullptr) {
+        if (esString(buscador)) {
+            if (aux->getCurso().getNombre()==buscador) {
+                cout << aux->getCurso().getCodigo();
+                cout << "---";
+                cout << aux->getCurso().getNombre();
+                cout << "---";
+                cout << aux->getCurso().getCantidadMax();
+                cout << "---";
+                cout << aux->getCurso().getCarrera();
+                cout << "---";
+                cout << aux->getCurso().getProfesor() << endl;
+            }
+        } else {
+            int buscadorId = stoi(buscador);
+            if (aux->getCurso().getCodigo()==buscadorId) {
+                cout << aux->getCurso().getCodigo();
+                cout << "---";
+                cout << aux->getCurso().getNombre();
+                cout << "---";
+                cout << aux->getCurso().getCantidadMax();
+                cout << "---";
+                cout << aux->getCurso().getCarrera();
+                cout << "---";
+                cout << aux->getCurso().getProfesor() << endl;
+            }
+        }
+        aux = aux->getSiguiente();
+    }
+}
+
+bool eliminarCurso(NodoCurso*& head) {
+    if (head == nullptr) {
+        cout << "La lista esta vacia" << endl;
+        return false;
+    }
+
+    string codigoString;
+    cout << "Ingrese un codigo: ";
+    cin >> codigoString;
+    if (esString(codigoString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return false;
+    }
+    int codigo = stoi(codigoString);
+
+    NodoCurso* aux = head;
+    NodoCurso* anterior = nullptr;
+    while (aux!= nullptr) {
+        if (aux->getCurso().getCodigo()==codigo) {
+            if (anterior == nullptr) {
+                head = aux->getSiguiente();
+            } else {
+                anterior->setSiguiente(aux->getSiguiente());
+            }
+            delete aux;
+            return true;
+        }
+        anterior = aux;
+        aux = aux->getSiguiente();
+    }
+    return false;
+}
+
+
+

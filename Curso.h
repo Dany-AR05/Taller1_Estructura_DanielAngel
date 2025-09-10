@@ -13,6 +13,7 @@ private:
     string profesor;
 
 public:
+    Curso();
     Curso(int codigo, string nombre, int cantidadMax, string carrera, string profesor);
 
     int getCodigo();
