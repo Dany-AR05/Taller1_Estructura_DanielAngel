@@ -14,3 +14,4 @@ string Curso::getNombre(){return nombre;};
 int Curso::getCantidadMax(){return cantidadMax;};
 string Curso::getCarrera(){return carrera;};
 string Curso::getProfesor() {return profesor;};
+void Curso::setCantidadMax(int cantidadMax){ this->cantidadMax = cantidadMax;};

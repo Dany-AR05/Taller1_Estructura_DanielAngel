@@ -21,6 +21,7 @@ public:
     int getCantidadMax();
     string getCarrera();
     string getProfesor();
+    void setCantidadMax(int cantidadMax);
 };
 
 #endif

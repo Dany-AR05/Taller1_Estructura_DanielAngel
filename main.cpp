@@ -14,7 +14,7 @@ public:
         this->siguiente = nullptr;
     }
 
-    Alumno getAlumno() { return this->alumno; }
+    Alumno& getAlumno() { return this->alumno; }
     void setAlumno(Alumno alumno){ this->alumno = alumno; }
     NodoAlumno* getSiguiente(){ return this->siguiente; }
     void setSiguiente(NodoAlumno* siguiente){ this->siguiente = siguiente; }
@@ -31,7 +31,7 @@ public:
         this->siguiente = nullptr;
     }
 
-    Curso getCurso(){ return this->curso; }
+    Curso& getCurso(){ return this->curso; }
     void setCurso(Curso curso){ this->curso = curso; }
     NodoCurso* getSiguiente(){ return this->siguiente; }
     void setSiguiente(NodoCurso* siguiente){ this->siguiente = siguiente; }
@@ -44,6 +44,7 @@ bool eliminarAlumno(NodoAlumno*& head);
 bool addCurso(NodoCurso*& head);
 void buscarCurso(NodoCurso* head);
 bool eliminarCurso(NodoCurso*& head);
+bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno);
 
 
 int main() {
@@ -139,6 +140,11 @@ int main() {
 
                 switch (opcion2) {
                     case 1: {
+                        if (inscripcionCurso(headCurso, headAlumno)) {
+                            cout << "Inscripcion Correctamente" << endl;
+                        } else {
+                            cout << "Inscripcion Incorrecta" << endl;
+                        }
                         break;
 
                     }
@@ -426,6 +432,57 @@ bool eliminarCurso(NodoCurso*& head) {
         aux = aux->getSiguiente();
     }
     return false;
+}
+
+bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
+    string idString;
+    cout << "Ingrese el id de la persona: ";
+    cin >> idString;
+    if (esString(idString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return false;
+    }
+    int id = stoi(idString);
+    string codigoString;
+    cout << "Ingrese un codigo de la carrera: ";
+    cin >> codigoString;
+    if (esString(codigoString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return false;
+    }
+    int codigo = stoi(codigoString);
+
+    NodoAlumno* auxAlumno = headAlumno;
+    Alumno* alumnoSelec = nullptr;
+    while (auxAlumno != nullptr) {
+        if (auxAlumno->getAlumno().getId()==id) {
+            alumnoSelec = &auxAlumno->getAlumno();
+            break;
+        }
+        auxAlumno = auxAlumno->getSiguiente();
+    }
+
+    NodoCurso* auxCurso = headCurso;
+    Curso* cursoSelec = nullptr;
+    while (auxCurso != nullptr) {
+        if (auxCurso->getCurso().getCodigo()==codigo) {
+            cursoSelec = &auxCurso->getCurso();
+            break;
+        }
+        auxCurso = auxCurso->getSiguiente();
+    }
+
+    if (alumnoSelec==nullptr || cursoSelec==nullptr) {
+        return false;
+    }
+
+
+    if (cursoSelec->getCantidadMax()>=1 && cursoSelec->getCarrera()==alumnoSelec->getCarrera()) {
+        if (alumnoSelec->inscribirCurso(cursoSelec)) {
+            cursoSelec->setCantidadMax(cursoSelec->getCantidadMax()-1);
+        };
+    }
+    return true;
 }
 
 
