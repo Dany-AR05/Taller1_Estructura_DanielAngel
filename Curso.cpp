@@ -1,4 +1,5 @@
 #include "Curso.h"
+#include <iostream>
 
 Curso::Curso(){};
 Curso::Curso(int codigo, string nombre, int cantidadMax, string carrera, string profesor) {
@@ -15,3 +16,24 @@ int Curso::getCantidadMax(){return cantidadMax;};
 string Curso::getCarrera(){return carrera;};
 string Curso::getProfesor() {return profesor;};
 void Curso::setCantidadMax(int cantidadMax){ this->cantidadMax = cantidadMax;};
+
+bool Curso::registrarNota(Alumno* alumno, float nota) {
+    if (nota<1.0 || nota>7.0) {
+        cout << "Nota invalido" << endl;
+        return false;
+    }
+
+    Nota* notaNueva = new Nota(alumno, nota);
+
+    if (headNotas==nullptr) {
+        headNotas=notaNueva;
+        return true;
+    }
+
+    Nota* aux = headNotas;
+    while (aux->getSiguiente() != nullptr) {
+        aux = aux->getSiguiente();
+    }
+    aux->setSiguiente(notaNueva);
+    return true;
+}

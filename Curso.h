@@ -1,8 +1,13 @@
 #ifndef TALLER1_ESTRUCTURA_DANIELANGEL_CURSO_H
 #define TALLER1_ESTRUCTURA_DANIELANGEL_CURSO_H
 #include <string>
-using namespace std;
+#include "Nota.h"
+#include "Alumno.h"
 
+class Nota;
+class Alumno;
+
+using namespace std;
 
 class Curso {
 private:
@@ -11,6 +16,7 @@ private:
     int cantidadMax;
     string carrera;
     string profesor;
+    Nota* headNotas;
 
 public:
     Curso();
@@ -22,6 +28,6 @@ public:
     string getCarrera();
     string getProfesor();
     void setCantidadMax(int cantidadMax);
+    bool registrarNota(Alumno* alumno, float nota);
 };
-
 #endif

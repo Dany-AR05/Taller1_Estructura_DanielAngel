@@ -4,6 +4,8 @@
 #include "Curso.h"
 using namespace std;
 
+class Curso;
+
 class Alumno {
 private:
     int id;
@@ -39,7 +41,6 @@ public:
     bool inscribirCurso(Curso* curso);
     bool eliminarCurso(Curso* curso);
     void imprimirCursos();
+    Curso* tieneCurso(int codigo);
 };
-
-
 #endif

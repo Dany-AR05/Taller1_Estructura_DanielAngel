@@ -7,4 +7,6 @@ add_executable(Taller1_Estructura_DanielAngel main.cpp
         Alumno.cpp
         Alumno.h
         Curso.cpp
-        Curso.h)
+        Curso.h
+        Nota.cpp
+        Nota.h)

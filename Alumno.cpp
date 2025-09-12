@@ -81,7 +81,15 @@ void Alumno::imprimirCursos() {
         }
 }
 
-
-
-
-
+Curso* Alumno::tieneCurso(int codigo) {
+    Curso* cursoSelec = nullptr;
+    RefCurso* aux = headInscripcion;
+    while (aux != nullptr) {
+        if (aux->getCurso()->getCodigo()==codigo) {
+            cursoSelec = aux->getCurso();
+            return cursoSelec;
+        }
+        aux = aux->getSiguiente();
+    }
+    return cursoSelec;
+}

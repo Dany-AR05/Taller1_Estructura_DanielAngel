@@ -48,6 +48,7 @@ bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno);
 bool eliminarInscripcion(NodoCurso*& headCurso, NodoAlumno*& headAlumno);
 void imprimirAlumnosCarrera(NodoAlumno*& head);
 void imprimirCursosAlumno(NodoAlumno*& head);
+void registrarNota(NodoAlumno*& head);
 
 
 int main() {
@@ -171,8 +172,8 @@ int main() {
 
                 switch (opcion2) {
                     case 1: {
+                        registrarNota(headAlumno);
                         break;
-
                     }
                 }
                 break;
@@ -573,5 +574,44 @@ void imprimirCursosAlumno(NodoAlumno*& head) {
     alumnoSelec->imprimirCursos();
 }
 
+void registrarNota(NodoAlumno*& head) {
+    string idString;
+    cout << "Ingrese el id de la persona: ";
+    cin >> idString;
+    if (esString(idString)) {
+        cout << "Error id tiene que ser un numero" << endl;
+        return;
+    }
+    int id = stoi(idString);
+    string codigoString;
+    cout << "Ingrese el codigo de el curso: ";
+    cin >> codigoString;
+    if (esString(codigoString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return;
+    }
+    int codigo = stoi(codigoString);
+    Alumno* alumnoSelec = existeAlumno(head, id);
+    if (alumnoSelec==nullptr) {
+        return;
+    }
+    Curso* cursoSelec = alumnoSelec->tieneCurso(codigo);
+    if (cursoSelec==nullptr) {
+        return;
+    }
 
+    float nota;
+    char opcion = 's';
+    while (opcion == 's') {
+        cout << "Ingrese la nota de el curso: ";
+        cin >> nota;
+        if (cursoSelec->registrarNota(alumnoSelec, nota)) {
+            cout << "Nota registrada correctamente" << endl;
+        } else {
+            cout << "Nota no registrada" << endl;
+        }
+        cout << "Quiere seguir ingresando notas? (s/n): ";
+        cin >> opcion;
+    }
+}
 
