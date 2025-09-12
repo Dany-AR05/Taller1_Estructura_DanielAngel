@@ -66,6 +66,22 @@ bool Alumno::eliminarCurso(Curso* curso) {
     }
     return false;
 }
+void Alumno::imprimirCursos() {
+    if (headInscripcion==nullptr) {
+        cout << "El alumno no esta en ningun curso" << endl;
+        return;
+    }
+
+    cout << "El alumno: " << getNombre() << " " << getApellido() << " Esta inscrito en los siguientes cursos: " << endl;
+
+    RefCurso* aux = headInscripcion;
+    while (aux!= nullptr) {
+        cout << aux->getCurso()->getNombre() << endl;
+        aux = aux->getSiguiente();
+        }
+}
+
+
 
 
 

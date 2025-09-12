@@ -38,6 +38,7 @@ public:
 
     bool inscribirCurso(Curso* curso);
     bool eliminarCurso(Curso* curso);
+    void imprimirCursos();
 };
 
 

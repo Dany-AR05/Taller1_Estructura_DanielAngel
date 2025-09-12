@@ -45,6 +45,9 @@ bool addCurso(NodoCurso*& head);
 void buscarCurso(NodoCurso* head);
 bool eliminarCurso(NodoCurso*& head);
 bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno);
+bool eliminarInscripcion(NodoCurso*& headCurso, NodoAlumno*& headAlumno);
+void imprimirAlumnosCarrera(NodoAlumno*& head);
+void imprimirCursosAlumno(NodoAlumno*& head);
 
 
 int main() {
@@ -149,8 +152,12 @@ int main() {
 
                     }
                     case 2: {
+                        if (eliminarInscripcion(headCurso, headAlumno)) {
+                            cout << "Inscripcion Eliminado Correctamente" << endl;
+                        } else {
+                            cout << "Inscripcion no eliminado" << endl;
+                        }
                         break;
-
                     }
                 }
                 break;
@@ -182,10 +189,11 @@ int main() {
 
                 switch (opcion2) {
                     case 1: {
+                        imprimirAlumnosCarrera(headAlumno);
                         break;
-
                     }
                     case 2: {
+                        imprimirCursosAlumno(headAlumno);
                         break;
 
                     }
@@ -434,6 +442,30 @@ bool eliminarCurso(NodoCurso*& head) {
     return false;
 }
 
+Alumno* existeAlumno(NodoAlumno* aux, int id) {
+    Alumno* alumnoSelec = nullptr;
+    while (aux != nullptr) {
+        if (aux->getAlumno().getId()==id) {
+            alumnoSelec = &aux->getAlumno();
+            return alumnoSelec;
+        }
+        aux = aux->getSiguiente();
+    }
+    return alumnoSelec;
+}
+
+Curso* existeCurso(NodoCurso* aux, int codigo) {
+    Curso* cursoSelec = nullptr;
+    while (aux != nullptr) {
+        if (aux->getCurso().getCodigo()==codigo) {
+            cursoSelec = &aux->getCurso();
+            return cursoSelec;
+        }
+        aux = aux->getSiguiente();
+    }
+    return cursoSelec;
+}
+
 bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
     string idString;
     cout << "Ingrese el id de la persona: ";
@@ -444,7 +476,7 @@ bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
     }
     int id = stoi(idString);
     string codigoString;
-    cout << "Ingrese un codigo de la carrera: ";
+    cout << "Ingrese un codigo de el curso: ";
     cin >> codigoString;
     if (esString(codigoString)) {
         cout << "Error codigo tiene que ser un numero" << endl;
@@ -452,37 +484,93 @@ bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
     }
     int codigo = stoi(codigoString);
 
-    NodoAlumno* auxAlumno = headAlumno;
-    Alumno* alumnoSelec = nullptr;
-    while (auxAlumno != nullptr) {
-        if (auxAlumno->getAlumno().getId()==id) {
-            alumnoSelec = &auxAlumno->getAlumno();
-            break;
-        }
-        auxAlumno = auxAlumno->getSiguiente();
-    }
+    Alumno* alumnoSelec = existeAlumno(headAlumno, id);
+    Curso* cursoSelec = existeCurso(headCurso, codigo);
 
-    NodoCurso* auxCurso = headCurso;
-    Curso* cursoSelec = nullptr;
-    while (auxCurso != nullptr) {
-        if (auxCurso->getCurso().getCodigo()==codigo) {
-            cursoSelec = &auxCurso->getCurso();
-            break;
-        }
-        auxCurso = auxCurso->getSiguiente();
-    }
 
     if (alumnoSelec==nullptr || cursoSelec==nullptr) {
         return false;
     }
 
-
     if (cursoSelec->getCantidadMax()>=1 && cursoSelec->getCarrera()==alumnoSelec->getCarrera()) {
         if (alumnoSelec->inscribirCurso(cursoSelec)) {
             cursoSelec->setCantidadMax(cursoSelec->getCantidadMax()-1);
-        };
+            return true;
+        } else {
+            return false;
+        }
     }
-    return true;
+}
+
+bool eliminarInscripcion(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
+    string idString;
+    cout << "Ingrese el id de la persona: ";
+    cin >> idString;
+    if (esString(idString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return false;
+    }
+    int id = stoi(idString);
+    string codigoString;
+    cout << "Ingrese un codigo de el curso: ";
+    cin >> codigoString;
+    if (esString(codigoString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return false;
+    }
+    int codigo = stoi(codigoString);
+
+    Alumno* alumnoSelec = existeAlumno(headAlumno, id);
+    Curso* cursoSelec = existeCurso(headCurso, codigo);
+
+    if (alumnoSelec==nullptr || cursoSelec==nullptr) {
+        return false;
+    }
+
+    if (alumnoSelec->eliminarCurso(cursoSelec)) {
+        cursoSelec->setCantidadMax(cursoSelec->getCantidadMax()+1);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void imprimirAlumnosCarrera(NodoAlumno*& head) {
+    string carrera;
+    cout << "Ingrese nombre de la carrera: ";
+    cin >> carrera;
+
+    NodoAlumno* aux= head;
+    bool existe = false;
+    while (aux != nullptr) {
+        if (aux->getAlumno().getCarrera()==carrera) {
+            cout << "Alumno: " << aux->getAlumno().getNombre() << " " <<aux->getAlumno().getApellido() << "Inscrito en la carrera" << endl;
+            existe = true;
+        }
+        aux = aux->getSiguiente();
+    }
+    if (!existe) {
+        cout << "No existe ningun alumno en la carrera" << endl;
+    }
+}
+
+void imprimirCursosAlumno(NodoAlumno*& head) {
+    string idString;
+    cout << "Ingrese el id de la persona: ";
+    cin >> idString;
+    if (esString(idString)) {
+        cout << "Error id que ser un numero" << endl;
+        return;
+    }
+    int id = stoi(idString);
+
+    Alumno* alumnoSelec = existeAlumno(head, id);
+
+    if (alumnoSelec==nullptr) {
+        cout << "No existe ningun alumno con esa id" << endl;
+        return;
+    }
+    alumnoSelec->imprimirCursos();
 }
 
 
