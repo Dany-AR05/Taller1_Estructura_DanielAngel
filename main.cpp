@@ -519,6 +519,7 @@ bool inscripcionCurso(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
         }
     }
     return false;
+
 }
 
 bool eliminarInscripcion(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
