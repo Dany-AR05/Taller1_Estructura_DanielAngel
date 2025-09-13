@@ -37,9 +37,12 @@ public:
     string getApellido();
     string getCarrera();
     string getFechaIngreso();
+    RefCurso* getRefCurso();
+    float promedioGeneral();
 
     bool inscribirCurso(Curso* curso);
     bool eliminarCurso(Curso* curso);
+    void eliminarTodosCurso();
     void imprimirCursos();
     Curso* tieneCurso(int codigo);
 };

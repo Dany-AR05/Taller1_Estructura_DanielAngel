@@ -16,6 +16,8 @@ int Curso::getCantidadMax(){return cantidadMax;};
 string Curso::getCarrera(){return carrera;};
 string Curso::getProfesor() {return profesor;};
 void Curso::setCantidadMax(int cantidadMax){ this->cantidadMax = cantidadMax;};
+Nota *Curso::getHeadNotas() {return this->headNotas;}
+
 
 bool Curso::registrarNota(Alumno* alumno, float nota) {
     if (nota<1.0 || nota>7.0) {
@@ -36,4 +38,28 @@ bool Curso::registrarNota(Alumno* alumno, float nota) {
     }
     aux->setSiguiente(notaNueva);
     return true;
+}
+
+float Curso::promedioNotas(Alumno* alumno) {
+    float promedio = 0;
+    int contador= 0;
+
+    if (headNotas==nullptr) {
+        cout << "El alumno no tiene notas registradas" << endl;
+        return 0.0;
+    }
+
+    Nota* aux = headNotas;
+    while (aux!= nullptr) {
+        if (aux->getAlumno() == alumno) {
+            promedio = promedio + aux->getNota();
+            contador++;
+        }
+        aux = aux->getSiguiente();
+    }
+    if (contador==0) {
+        cout << "El alumno no tiene notas registradas" << endl;
+        return 0.0;
+    }
+    return promedio / contador;
 }

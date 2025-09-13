@@ -49,6 +49,8 @@ bool eliminarInscripcion(NodoCurso*& headCurso, NodoAlumno*& headAlumno);
 void imprimirAlumnosCarrera(NodoAlumno*& head);
 void imprimirCursosAlumno(NodoAlumno*& head);
 void registrarNota(NodoAlumno*& head);
+void promedioAlumno(NodoCurso*& headCurso, NodoAlumno*& headAlumno);
+void promedioGeneral(NodoAlumno*& headAlumno);
 
 
 int main() {
@@ -199,10 +201,12 @@ int main() {
 
                     }
                     case 3: {
+                        promedioAlumno(headCurso, headAlumno);
                         break;
 
                     }
                     case 4: {
+                        promedioGeneral(headAlumno);
                         break;
 
                     }
@@ -210,6 +214,12 @@ int main() {
                 break;
             }
         }
+    }
+    while (headAlumno!=nullptr) {
+        eliminarCurso(headCurso);
+    }
+    while (headCurso!=nullptr) {
+        eliminarCurso(headCurso);
     }
 }
 
@@ -316,6 +326,7 @@ bool eliminarAlumno(NodoAlumno*& head) {
     NodoAlumno* anterior = nullptr;
     while (aux!= nullptr) {
         if (aux->getAlumno().getId()==id) {
+           aux->getAlumno().eliminarTodosCurso();
             if (anterior == nullptr) {
                 head = aux->getSiguiente();
             } else {
@@ -429,6 +440,12 @@ bool eliminarCurso(NodoCurso*& head) {
     NodoCurso* anterior = nullptr;
     while (aux!= nullptr) {
         if (aux->getCurso().getCodigo()==codigo) {
+            Nota* notaAux = aux->getCurso().getHeadNotas();
+            while (notaAux != nullptr) {
+                Nota* siguiente = notaAux->getSiguiente();
+                delete notaAux;
+                notaAux = siguiente;
+            }
             if (anterior == nullptr) {
                 head = aux->getSiguiente();
             } else {
@@ -615,3 +632,54 @@ void registrarNota(NodoAlumno*& head) {
     }
 }
 
+void promedioAlumno(NodoCurso*& headCurso, NodoAlumno*& headAlumno) {
+    string codigoString;
+    cout << "Ingrese un codigo de el curso: ";
+    cin >> codigoString;
+    if (esString(codigoString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return;
+    }
+    int codigo = stoi(codigoString);
+    Curso* cursoSelec = existeCurso(headCurso, codigo);
+    if (cursoSelec==nullptr) {
+        return;
+    }
+    string idString;
+    cout << "Ingrese el id de la persona: ";
+    cin >> idString;
+    if (esString(idString)) {
+        cout << "Error codigo tiene que ser un numero" << endl;
+        return;
+    }
+    int id = stoi(idString);
+
+    Alumno* alumnoSelec = existeAlumno(headAlumno, id);
+
+    if (alumnoSelec==nullptr) {
+        return;
+    }
+
+    float promedio = cursoSelec->promedioNotas(alumnoSelec);
+
+    cout << "El promedio de notas es: " << promedio << endl;
+}
+
+void promedioGeneral(NodoAlumno*& headAlumno) {
+    string idString;
+    cout << "Ingrese el id de la persona: ";
+    cin >> idString;
+    if (esString(idString)) {
+        cout << "Error id tiene que ser un numero" << endl;
+        return;
+    }
+    int id = stoi(idString);
+
+    Alumno* alumnoSelec = existeAlumno(headAlumno, id);
+    if (alumnoSelec==nullptr) {
+        return;
+    }
+
+   float promedioGeneral = alumnoSelec->promedioGeneral();
+    cout << "El promedio general es: " << promedioGeneral << endl;
+}

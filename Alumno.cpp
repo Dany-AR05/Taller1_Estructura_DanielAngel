@@ -66,6 +66,17 @@ bool Alumno::eliminarCurso(Curso* curso) {
     }
     return false;
 }
+
+void Alumno::eliminarTodosCurso() {
+    RefCurso* aux = headInscripcion;
+    while (aux != nullptr) {
+        RefCurso* siguiente = aux->getSiguiente();
+        delete aux;
+        aux = siguiente;
+    }
+    headInscripcion = nullptr;
+}
+
 void Alumno::imprimirCursos() {
     if (headInscripcion==nullptr) {
         cout << "El alumno no esta en ningun curso" << endl;
@@ -92,4 +103,32 @@ Curso* Alumno::tieneCurso(int codigo) {
         aux = aux->getSiguiente();
     }
     return cursoSelec;
+}
+
+Alumno::RefCurso* Alumno::getRefCurso() {return headInscripcion;}
+
+float Alumno::promedioGeneral() {
+    int contador = 0;
+    float promedioGeneral = 0;
+    if (headInscripcion == nullptr) {
+        cout << "El alumno no esta en ningun curso" << endl;
+        return 0.0;
+    }
+
+    RefCurso* aux = headInscripcion;
+    while (aux != nullptr) {
+        float promedio = aux->getCurso()->promedioNotas(this);
+        if (promedio>0.0) {
+            promedioGeneral = promedioGeneral + aux->getCurso()->promedioNotas(this);
+            contador++;
+
+        }
+        aux = aux->getSiguiente();
+    }
+
+    if (contador==0) {
+        cout << "El alumno no tiene notas registradas" << endl;
+        return 0.0;
+    }
+    return promedioGeneral / contador;
 }

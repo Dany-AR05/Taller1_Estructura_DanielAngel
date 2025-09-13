@@ -27,7 +27,9 @@ public:
     int getCantidadMax();
     string getCarrera();
     string getProfesor();
+    Nota* getHeadNotas();
     void setCantidadMax(int cantidadMax);
     bool registrarNota(Alumno* alumno, float nota);
+    float promedioNotas(Alumno* alumno);
 };
 #endif
